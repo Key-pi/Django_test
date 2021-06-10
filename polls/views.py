@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 
+from .forms import TriangleForm
 from .models import Choice, Question
 
 
@@ -40,3 +41,16 @@ def vote(request, question_id):
         selected_choice.votes += 1
         selected_choice.save()
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+def triangle(request):
+    if request.method == "POST":
+        form = TriangleForm(request.POST)
+        if form.is_valid():
+            size_a = form.cleaned_data['size_a']
+            size_b = form.cleaned_data['size_b']
+            result = (size_a ** 2 + size_b ** 2) ** 0.5
+            return render(request, 'polls/triangle.html', context={"result": result, })
+    else:
+        form = TriangleForm()
+    return render(request, 'polls/triangle.html', context={"form": form, })

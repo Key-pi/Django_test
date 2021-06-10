@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hypotenuse calculate</title>
+</head>
+<body>
+    <h3>Hypotenuse calculate</h3>
+    <form method="post">
+        {% if result %}
+            <p>Hypotenuse equals: {{ result }}</p>
+        {% else %}
+            {% csrf_token %}
+            <table>
+            {{ form.as_table }}
+            </table>
+        <input type="submit" value="Calculate" >
+    {% endif %}
+    </form>
+</body>
+</html>
