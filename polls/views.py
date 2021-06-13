@@ -61,13 +61,14 @@ def triangle(request):
 def person(request):
     if request.method == "POST":
         form = PersonForm(request.POST)
+
         if form.is_valid():
             try:
-                form.save()
+                person = form.save()
                 messages.add_message(request, messages.SUCCESS, 'Person successfully added')
             except ValueError:
                 messages.add_message(request, messages.ERROR, 'Person dont created')
-            return redirect(reverse('/polls/person/update/',))
+            return redirect('polls:person_update', pk=person.pk)
     else:
         form = PersonForm()
     return render(request, 'polls/person.html', context={"form": form, })
@@ -85,5 +86,5 @@ def person_update(request, pk):
                 messages.add_message(request, messages.SUCCESS, 'Person update')
             except ValueError:
                 messages.add_message(request, messages.ERROR, 'Person dont update')
-            return redirect('person_update', pk=pk)
+            return redirect('polls:person_update', pk=pk)
     return render(request, 'polls/person_update.html', context={"form": form, 'person_inst': item})
