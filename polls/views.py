@@ -1,11 +1,13 @@
+from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
 
-from .forms import TriangleForm
-from .models import Choice, Question
+
+from .forms import PersonForm, TriangleForm
+from .models import Choice, Person, Question
 
 
 class IndexView(generic.ListView):
@@ -54,3 +56,34 @@ def triangle(request):
     else:
         form = TriangleForm()
     return render(request, 'polls/triangle.html', context={"form": form, })
+
+
+def person(request):
+    if request.method == "POST":
+        form = PersonForm(request.POST)
+        if form.is_valid():
+            try:
+                form.save()
+                messages.add_message(request, messages.SUCCESS, 'Person successfully added')
+            except ValueError:
+                messages.add_message(request, messages.ERROR, 'Person dont created')
+            return redirect(reverse('/polls/person/update/',))
+    else:
+        form = PersonForm()
+    return render(request, 'polls/person.html', context={"form": form, })
+
+
+def person_update(request, pk):
+    item = get_object_or_404(Person, pk=pk)
+    if request.method == "GET":
+        form = PersonForm(instance=item)
+    else:
+        form = PersonForm(request.POST, instance=item)
+        if form.is_valid():
+            try:
+                form.save()
+                messages.add_message(request, messages.SUCCESS, 'Person update')
+            except ValueError:
+                messages.add_message(request, messages.ERROR, 'Person dont update')
+            return redirect('person_update', pk=pk)
+    return render(request, 'polls/person_update.html', context={"form": form, 'person_inst': item})
