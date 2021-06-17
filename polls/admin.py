@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import Choice, Question
+from .models import Choice, Log, Question
+
+
+@admin.register(Log)
+class LogAdmin(admin.ModelAdmin):
+    list_display = ['method', 'path', 'timestamp']
+    date_hierarchy = 'timestamp'
+    list_filter = ['method', 'timestamp']
 
 
 class ChoiceInline(admin.TabularInline):
