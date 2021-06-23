@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -40,7 +43,15 @@ INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'otomtmfk.apps.OtomtmfkConfig',
     'django_extensions',
+
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        'silk',
+    ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,6 +63,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'silk.middleware.SilkyMiddleware',
+    ]
 
 ROOT_URLCONF = 'new_project.urls'
 
@@ -131,3 +148,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GRAPH_MODELS = {
     'app_labels': ['otomtmfk']
 }
+
+SILKY_AUTHENTICATION = True
+SILKY_AUTHORISATION = True
+
+def my_custom_perms(user):
+    return user.is_superuser
+
+SILKY_PERMISSIONS = my_custom_perms
