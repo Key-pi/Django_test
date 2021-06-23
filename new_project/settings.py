@@ -152,7 +152,9 @@ GRAPH_MODELS = {
 SILKY_AUTHENTICATION = True
 SILKY_AUTHORISATION = True
 
+
 def my_custom_perms(user):
     return user.is_superuser
+
 
 SILKY_PERMISSIONS = my_custom_perms
