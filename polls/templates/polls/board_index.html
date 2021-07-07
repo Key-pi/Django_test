@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Board</title>
+</head>
+
+<body>
+<ul>
+{% if board %}
+{% for boards in board %}
+
+<li>Boards: {{ boards }}</li>
+Description: {{ boards.description }}
+
+
+{% endfor %}
+{% endif %}
+</ul>
+
+</body>
+</html>
