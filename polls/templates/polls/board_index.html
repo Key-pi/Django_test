@@ -3,20 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Board</title>
+{#    <style>#}
+{#        ul.hr {#}
+{#            margin: 0;#}
+{#        }#}
+{#        ul.hr li {#}
+{#            display: inline-block;#}
+{#            border: 1px solid #000;#}
+{#            padding: 3px;#}
+{#        }#}
+{#    </style>#}
+
 </head>
 
 <body>
 <ul>
 {% if board %}
-{% for boards in board %}
-
-<li>Boards: {{ boards }}</li>
-Description: {{ boards.description }}
-
-
-{% endfor %}
-{% endif %}
+  {% for boards in board %}
+    <li>Boards: {{ boards }}</li>
+      Description: {{ boards.description }}
+      <hr>
+    {% endfor %}
+  {% endif %}
 </ul>
+
+{% if is_paginated %}
+    <ul id='hr'>
+      {% if page_obj.number > 1 %}
+        <li>
+          <a href="?page=1">First</a>
+        </li>
+      {% else %}
+        <li>
+          <span>First</span>
+        </li>
+      {% endif %}
+
+      {% if page_obj.has_previous %}
+        <li >
+          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+      {% else %}
+        <li >
+          <span>Previous</span>
+        </li>
+      {% endif %}
+
+      {% for page_num in paginator.page_range %}
+        {% if page_obj.number == page_num %}
+          <li >
+            <span>
+              {{ page_num }}
+              <span >(current)</span>
+            </span>
+          </li>
+        {% elif page_num > page_obj.number|add:'-3' and page_num < page_obj.number|add:'3' %}
+          <li >
+            <a href="?page={{ page_num }}">{{ page_num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li >
+          <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+      {% else %}
+        <li >
+          <span >Next</span>
+        </li>
+      {% endif %}
+
+      {% if page_obj.number != paginator.num_pages %}
+        <li >
+          <a  href="?page={{ paginator.num_pages }}">Last</a>
+        </li>
+      {% else %}
+        <li>
+          <span >Last</span>
+        </li>
+      {% endif %}
+    </ul>
+
+{% endif %}
+
 
 </body>
 </html>
+

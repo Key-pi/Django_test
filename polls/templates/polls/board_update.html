@@ -1,0 +1,14 @@
+{% block content %}
+<h1>Name: {{ board.name }}</h1>
+<h2>Description: {{ board.description }}</h2>
+<p>Renew information:</p>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <div class="form-actions">
+        <button type="submit">Update</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% block content %}
+<h1>Name: {{ board.name }}</h1>
+<h2>Description: {{ board.description }}</h2>
+<p>Renew information:</p>
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ board }}"?</p>
+    <input type="submit" value="Confirm">
+</form>
+{% endblock %}

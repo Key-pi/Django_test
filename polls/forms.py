@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Person, Board
+from .models import Person
 
 
 class TriangleForm(forms.Form):
@@ -13,9 +13,3 @@ class PersonForm(ModelForm):
     class Meta:
         model = Person
         fields = ['first_name', 'last_name', 'email']
-
-
-class BoardForm(ModelForm):
-    class Meta:
-        model = Board
-        fields = ['name', 'description']

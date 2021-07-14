@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import Choice, Log, Question, Board
-
+from .models import Board, Choice, Log, Question
 
 
 @admin.register(Log)

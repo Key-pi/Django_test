@@ -1,13 +1,14 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views import generic
 
 
 from .forms import PersonForm, TriangleForm
-from .models import Choice, Person, Question, Board
+from .models import Board, Choice, Person, Question
 
 
 class IndexView(generic.ListView):
@@ -30,14 +31,6 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-
-class IndexBoardView(generic.TemplateView):
-    template_name = 'polls/board_index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['board'] = Board.objects.all()
-        return context
 
 class CreateBoardView(generic.CreateView):
     pass
@@ -101,3 +94,40 @@ def person_update(request, pk):
             return redirect('polls:person_update', pk=pk)
     return render(request, 'polls/person_update.html', context={"form": form, 'person_inst': item})
 
+
+class BoardListView(generic.ListView):
+    model = Board
+    template_name = 'polls/board_index.html'
+    context_object_name = 'board'
+    paginate_by = 5
+
+
+class BoardInfoView(generic.DetailView):
+    model = Board
+    pk_url_kwarg = 'pk'
+    template_name = 'polls/board_info.html'
+    context_object_name = 'board'
+
+
+class BoardUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Board
+    fields = ('name', 'description')
+    template_name = 'polls/board_update.html'
+    pk_url_kwarg = 'pk'
+    context_object_name = 'board'
+    success_url = reverse_lazy('polls:board_view')
+
+
+class BoardDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Board
+    template_name = 'polls/board_delete.html'
+    pk_url_kwarg = 'pk'
+    context_object_name = 'board'
+    success_url = reverse_lazy('polls:board_view')
+
+
+class BoardCreate(generic.CreateView):
+    model = Board
+    fields = ['name', 'description']
+    template_name = 'polls/board_create.html'
+    success_url = reverse_lazy('polls:board_view')
